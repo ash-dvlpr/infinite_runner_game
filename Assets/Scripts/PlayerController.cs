@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour {
     private int ANIM_ID_PARAM_RUNNING  = Animator.StringToHash("IsRunning");
     private int ANIM_ID_PARAM_DEAD     = Animator.StringToHash("IsDead");
 
-    // JUMP variables
+    // ========================= Variables ==========================
+    // JUMP
     [Header("Jump Configuration")]
     [SerializeField] private float groundDetectionRange =  1.1f;
     [SerializeField] private float jumpForce            = 11.0f;
@@ -49,8 +50,7 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate() {
         isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
-        // TODO: Reset extra jumps
-
+        
         HandleMovement();
     }
 
@@ -99,5 +99,7 @@ public class PlayerController : MonoBehaviour {
     }
     void UpdateAnimationState() {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
+        _animator.SetBool(ANIM_ID_PARAM_RUNNING, false);
+        _animator.SetBool(ANIM_ID_PARAM_DEAD, false);
     }
 }
