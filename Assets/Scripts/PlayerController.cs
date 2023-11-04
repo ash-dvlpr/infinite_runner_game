@@ -5,27 +5,27 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
     private const string GROUND_LAYER_NAME = "Ground";
-    private float _groundDetectionRange = 1.1f;
 
     // JUMP variables
-    [SerializeField] private float jumpForce   = 11.0f;
-    [SerializeField] private float jumpGravity =  1.0f;
-    [SerializeField] private float fallGravity =  3.0f;
-    [SerializeField] private float jumpMaxTime =  0.2f;
+    [Header("Jump Configuration")]
+    [SerializeField] private float groundDetectionRange =  1.1f;
+    [SerializeField] private float jumpForce            = 11.0f;
+    [SerializeField] private float jumpGravity          =  1.0f;
+    [SerializeField] private float fallGravity          =  3.0f;
+    [SerializeField] private float jumpMaxTime          =  0.2f;
 
     private float jumpTimeCounter;
     private bool  isJumping;
 
     // Inputs & States
-    private bool  iJumpClicked     = false;
-    private bool  iJumpPressed     = false;
-    private bool  isTouchingGround = false;
-
+    bool iJumpClicked     = false;
+    bool iJumpPressed     = false;
+    bool isTouchingGround = false;
 
     // References & Components
-    private Rigidbody2D _rb;
-    private Animator _animator;
-    private LayerMask _groundLayer;
+    Rigidbody2D _rb;
+    Animator    _animator;
+    LayerMask   _groundLayer;
 
     // ========================= Unity Code =========================
     void Awake() {
@@ -42,11 +42,11 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         UpdateInputs();
         PreHandleMovement();
-        //UpdateAnimationState();
+        UpdateAnimationState();
     }
 
     void FixedUpdate() {
-        isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, _groundDetectionRange, _groundLayer);
+        isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
         // TODO: Reset extra jumps
 
         HandleMovement();
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour {
 
     void OnDrawGizmos() {
         //Gizmos.DrawWireSphere(this.transform.position, _distanceRaycast);
-        Gizmos.DrawRay(transform.position, Vector2.down * _groundDetectionRange);
+        Gizmos.DrawRay(transform.position, Vector2.down * groundDetectionRange);
     }
 
     // ========================= Custom Code ========================
@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviour {
     }
     void PreHandleMovement() {
         //? JUMP
-
         if (iJumpPressed) {
             // Start jumping 
             if (isTouchingGround) {
@@ -91,7 +90,7 @@ public class PlayerController : MonoBehaviour {
             isJumping = false;
         }
 
-        // Update gravity
+        // Update gravity when jumping/falling
         _rb.gravityScale = isJumping ? jumpGravity : fallGravity;
     }
     void HandleMovement() {
