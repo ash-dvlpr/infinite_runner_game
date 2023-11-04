@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
     private const string GROUND_LAYER_NAME = "Ground";
+    private int ANIM_ID_PARAM_GROUNDED = Animator.StringToHash("IsGrounded");
+    private int ANIM_ID_PARAM_RUNNING  = Animator.StringToHash("IsRunning");
+    private int ANIM_ID_PARAM_DEAD     = Animator.StringToHash("IsDead");
 
     // JUMP variables
     [Header("Jump Configuration")]
@@ -18,7 +21,6 @@ public class PlayerController : MonoBehaviour {
     private bool  isJumping;
 
     // Inputs & States
-    bool iJumpClicked     = false;
     bool iJumpPressed     = false;
     bool isTouchingGround = false;
 
@@ -60,7 +62,6 @@ public class PlayerController : MonoBehaviour {
     // ========================= Custom Code ========================
     void UpdateInputs() {
         // TODO: PC specific code
-        iJumpClicked = Input.GetMouseButtonDown(0);
         iJumpPressed = Input.GetMouseButton(0);
 
         // TODO: Android specific code
@@ -97,6 +98,6 @@ public class PlayerController : MonoBehaviour {
 
     }
     void UpdateAnimationState() {
-        _animator.SetBool("IsGrounded", isTouchingGround);
+        _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
     }
 }
