@@ -359,7 +359,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4847397192534989821, guid: e2243180e032a6a44a421c645fe1b550, type: 3}
       propertyPath: jumpForce
-      value: 100
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847397192534989821, guid: e2243180e032a6a44a421c645fe1b550, type: 3}
+      propertyPath: fallGravity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847397192534989821, guid: e2243180e032a6a44a421c645fe1b550, type: 3}
+      propertyPath: jumpMaxTime
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4847397192534989821, guid: e2243180e032a6a44a421c645fe1b550, type: 3}
       propertyPath: acceleration

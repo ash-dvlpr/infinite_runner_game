@@ -7,19 +7,20 @@ public class PlayerController : MonoBehaviour {
     private const string GROUND_LAYER_NAME = "Ground";
     private float _groundDetectionRange = 1.1f;
 
-    // Movement variables
-    [SerializeField] private float mvSpeed      = 1f;
-    [SerializeField] private float jumpForce    = 90f;
-    [SerializeField] private float acceleration = 15f;
-    [SerializeField] private float minJumpDelay = 0.1f;
-    private float velocity, lastJumpT;
+    // JUMP variables
+    [SerializeField] private float jumpForce   = 11.0f;
+    [SerializeField] private float jumpGravity =  1.0f;
+    [SerializeField] private float fallGravity =  3.0f;
+    [SerializeField] private float jumpMaxTime =  0.2f;
 
+    private float jumpTimeCounter;
+    private bool  isJumping;
 
     // Inputs & States
-    private float iHorAxis;
+    private bool  iJumpClicked     = false;
     private bool  iJumpPressed     = false;
     private bool  isTouchingGround = false;
-    
+
 
     // References & Components
     private Rigidbody2D _rb;
@@ -34,17 +35,20 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Start() {
-        
+
     }
 
     // Update is called once per frame
     void Update() {
         UpdateInputs();
         PreHandleMovement();
-        UpdateAnimationState();
+        //UpdateAnimationState();
     }
 
     void FixedUpdate() {
+        isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, _groundDetectionRange, _groundLayer);
+        // TODO: Reset extra jumps
+
         HandleMovement();
     }
 
@@ -55,42 +59,45 @@ public class PlayerController : MonoBehaviour {
 
     // ========================= Custom Code ========================
     void UpdateInputs() {
-        isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, _groundDetectionRange, _groundLayer);
-        
         // TODO: PC specific code
+        iJumpClicked = Input.GetMouseButtonDown(0);
         iJumpPressed = Input.GetMouseButton(0);
-        iHorAxis = Input.GetAxisRaw("Horizontal");
 
         // TODO: Android specific code
         // TODO: XBOX specific code
     }
     void PreHandleMovement() {
-        //? Moving
-        iHorAxis = 1f;
-        if (iHorAxis != 0.0f) {
-            velocity = Mathf.Clamp(
-                velocity + iHorAxis * acceleration * Time.deltaTime,
-                -1.0f, 1.0f
-            );
+        //? JUMP
+
+        if (iJumpPressed) {
+            // Start jumping 
+            if (isTouchingGround) {
+                _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+                jumpTimeCounter = jumpMaxTime;
+                isJumping = true;
+            }
+            // Make higher jump is input was held
+            else if (isJumping) {
+                if (jumpTimeCounter > 0) {
+                    _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+                    jumpTimeCounter -= Time.deltaTime;
+                }
+                else {
+                    isJumping = false;
+                }
+            }
         }
-        // Gradual slow down
         else {
-            velocity -= velocity * acceleration * Time.deltaTime;
+            isJumping = false;
         }
 
-        //? Jumping
-        iJumpPressed = true;
-        if (iJumpPressed && isTouchingGround && lastJumpT < Time.time - minJumpDelay) {
-            _rb.AddForce(Vector2.up * jumpForce);
-            lastJumpT = Time.time;
-        }
+        // Update gravity
+        _rb.gravityScale = isJumping ? jumpGravity : fallGravity;
     }
     void HandleMovement() {
-        float hVel = Mathf.Abs(velocity) < 0.01f ? 0.0f : velocity;
 
-        _rb.velocity = new Vector2(hVel * mvSpeed, _rb.velocity.y);
     }
-    void UpdateAnimationState() { 
-        
+    void UpdateAnimationState() {
+        _animator.SetBool("IsGrounded", isTouchingGround);
     }
 }
