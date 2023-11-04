@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7039453100232707512}
   - component: {fileID: 8486293991280676459}
   - component: {fileID: 2557207158962669780}
+  - component: {fileID: 4847397192534989821}
   m_Layer: 0
   m_Name: PF_Player
   m_TagString: Untagged
@@ -138,7 +139,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a80ba0dc2fcfe8d4994dabc9828b8270, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -148,7 +149,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 5
 --- !u!95 &2557207158962669780
 Animator:
   serializedVersion: 5
@@ -170,3 +171,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4847397192534989821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5313540302043936119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c4278a56a9d83498ed851f7ebc78a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mvSpeed: 1
+  jumpForce: 1
+  acceleration: 15
+  minJumpDelay: 0.1
