@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float jumpMaxTime          =  0.2f;
 
     private float jumpTimeCounter;
-    private bool  isJumping;
+    private bool  isJumping, isRunning, isDead;
 
     // Inputs & States
     bool iJumpPressed     = false;
@@ -35,23 +35,29 @@ public class PlayerController : MonoBehaviour {
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _groundLayer = LayerMask.GetMask(GROUND_LAYER_NAME);
+
+        // Subscribe events
+        GameManager.Instance.onGameStart += OnGameStart;
+        GameManager.Instance.onGameOver  += OnGameOver;
     }
 
-    void Start() {
-
+    void OnDestroy() {
+        // Unsubscribe events
+        GameManager.Instance.onGameStart -= OnGameStart;
+        GameManager.Instance.onGameOver  -= OnGameOver;
     }
 
     // Update is called once per frame
     void Update() {
-        UpdateInputs();
-        PreHandleMovement();
-        UpdateAnimationState();
+        if (GameManager.GetState() == GameManager.GameState.InGame) {
+            UpdateInputs();
+            PreHandleMovement();
+            UpdateAnimationState();
+        }
     }
 
     void FixedUpdate() {
         isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
-        
-        HandleMovement();
     }
 
     void OnDrawGizmos() {
@@ -60,9 +66,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     // ========================= Custom Code ========================
+    void OnGameStart() {
+        isRunning = true;
+    }
+    void OnGameOver() {
+        isRunning = false;
+        isDead = true;
+    }
+
     void UpdateInputs() {
         // TODO: PC specific code
-        iJumpPressed = Input.GetMouseButton(0);
+        iJumpPressed = Input.GetKey(KeyCode.Space);
 
         // TODO: Android specific code
         // TODO: XBOX specific code
@@ -94,12 +108,9 @@ public class PlayerController : MonoBehaviour {
         // Update gravity when jumping/falling
         _rb.gravityScale = isJumping ? jumpGravity : fallGravity;
     }
-    void HandleMovement() {
-
-    }
     void UpdateAnimationState() {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
-        _animator.SetBool(ANIM_ID_PARAM_RUNNING, false);
-        _animator.SetBool(ANIM_ID_PARAM_DEAD, false);
+        _animator.SetBool(ANIM_ID_PARAM_RUNNING,  isRunning);
+        _animator.SetBool(ANIM_ID_PARAM_DEAD,     isDead);
     }
 }
