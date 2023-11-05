@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// This class is in charge of managing the game's state and doing all the scene loading/unloading.
@@ -17,17 +18,18 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
 
     // ========================= Variables ==========================
-    private static int SCENE_ID_MAIN = 0;
-    private static int SCENE_ID_MENU = 1;
-    private static int SCENE_ID_GAME = 2;
+    private const int SCENE_ID_MAIN     = 0;
+    private const int SCENE_ID_MENU     = 1;
+    private const int SCENE_ID_GAME     = 2;
+    private const int SCENE_ID_GAMEOVER = 3;
 
     //? State & Scores
     private GameState state = 0;
-    public enum GameState : uint {
-        None     = 0,
-        MainMenu = 1,
-        InGame   = 2,
-        GameOver = 3,
+    public enum GameState : int {
+        None     = SCENE_ID_MAIN,
+        MainMenu = SCENE_ID_MENU,
+        InGame   = SCENE_ID_GAME,
+        GameOver = SCENE_ID_GAMEOVER,
     }
 
     // ========================= Unity Code =========================
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        // Initial load of game
         TryChangeGameState(GameState.MainMenu);    
     }
 
@@ -72,18 +73,37 @@ public class GameManager : MonoBehaviour {
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
             #endif
         }
+        else {
+            SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
+        }
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
-        // Unload MainMenu, load and start game
+        // Hide Menus
         if (GameState.MainMenu == state) {
             SceneManager.UnloadScene(SCENE_ID_MENU);
+            TriggerGameStartEvents();
+        }
+
+        else if (GameState.GameOver == state) {
+            SceneManager.UnloadScene(SCENE_ID_GAMEOVER);
+            TriggerGameRestartEvents();
         }
 
         return GameState.InGame;
     }
     private GameState HandleToGameOver() {
+        TriggerGameOverEvents();
         return GameState.GameOver;
+    }
+
+    // ===================== Outside Facing API ======================
+    public static GameState GetState() => Instance.state;
+    public static void RestartGame() {
+        Instance.TryChangeGameState(GameState.InGame);
+    }
+    public static void GameOver() {
+        Instance.TryChangeGameState(GameState.GameOver);
     }
 
     // ===================== Custom Events Code ======================
@@ -97,21 +117,9 @@ public class GameManager : MonoBehaviour {
         Instance?.onGameOver(); 
     }
 
-
-
-    // ===================== Outside Facing API ======================
-    public static GameState GetState() => Instance.state;
-    public static void RestartGame() {
-        Instance.TryChangeGameState(GameState.InGame);
-        Instance.TriggerGameStartEvents();
-    }
-    public static void GameOver() {
-        Debug.Log("GameOver was called");
-        Instance.TriggerGameOverEvents();
+    public event Action onGameRestart;
+    private void TriggerGameRestartEvents() {
+        Instance?.onGameRestart(); 
     }
 
 }
-
-
-
-//

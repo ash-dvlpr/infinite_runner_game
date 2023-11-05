@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UIButtons : MonoBehaviour {
-    public void StartGame() => GameManager.RestartGame();
+    public void RestartGame() => GameManager.RestartGame();
 }

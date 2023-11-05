@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour {
     private int ANIM_ID_PARAM_RUNNING  = Animator.StringToHash("IsRunning");
     private int ANIM_ID_PARAM_DEAD     = Animator.StringToHash("IsDead");
 
-    // ========================= Variables ==========================
-    // JUMP
+    //! ========================= Variables ==========================
+    //? JUMP
     [Header("Jump Configuration")]
     [SerializeField] private float groundDetectionRange =  1.1f;
     [SerializeField] private float jumpForce            = 11.0f;
@@ -21,39 +21,40 @@ public class PlayerController : MonoBehaviour {
     private float jumpTimeCounter;
     private bool  isJumping, isRunning, isDead;
 
-    // Inputs & States
+    //? Inputs & States
     bool iJumpPressed     = false;
     bool isTouchingGround = false;
 
-    // References & Components
+    //? References & Components
     Rigidbody2D _rb;
     Animator    _animator;
     LayerMask   _groundLayer;
 
-    // ========================= Unity Code =========================
+    //! ========================= Unity Code =========================
     void Awake() {
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _groundLayer = LayerMask.GetMask(GROUND_LAYER_NAME);
 
         // Subscribe events
-        GameManager.Instance.onGameStart += OnGameStart;
-        GameManager.Instance.onGameOver  += OnGameOver;
+        GameManager.Instance.onGameStart   += OnGameStart;
+        GameManager.Instance.onGameOver    += OnGameOver;
+        GameManager.Instance.onGameRestart += OnGameRestart;
     }
 
     void OnDestroy() {
         // Unsubscribe events
-        GameManager.Instance.onGameStart -= OnGameStart;
-        GameManager.Instance.onGameOver  -= OnGameOver;
+        GameManager.Instance.onGameStart   -= OnGameStart;
+        GameManager.Instance.onGameOver    -= OnGameOver;
+        GameManager.Instance.onGameRestart -= OnGameRestart;
     }
 
-    // Update is called once per frame
     void Update() {
         if (GameManager.GetState() == GameManager.GameState.InGame) {
             UpdateInputs();
             PreHandleMovement();
-            UpdateAnimationState();
         }
+        UpdateAnimationState();
     }
 
     void FixedUpdate() {
@@ -65,13 +66,19 @@ public class PlayerController : MonoBehaviour {
         Gizmos.DrawRay(transform.position, Vector2.down * groundDetectionRange);
     }
 
-    // ========================= Custom Code ========================
+    //! ========================= Custom Code ========================
     void OnGameStart() {
         isRunning = true;
+        isDead = false;
     }
     void OnGameOver() {
         isRunning = false;
         isDead = true;
+    }
+
+    void OnGameRestart() {
+        isRunning = true;
+        isDead = false;
     }
 
     void UpdateInputs() {
@@ -106,7 +113,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         // Update gravity when jumping/falling
-        _rb.gravityScale = isJumping ? jumpGravity : fallGravity;
+        _rb.gravityScale = iJumpPressed && isJumping ? jumpGravity : fallGravity;
     }
     void UpdateAnimationState() {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
