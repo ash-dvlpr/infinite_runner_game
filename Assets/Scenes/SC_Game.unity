@@ -180,7 +180,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 406d226d2aa0d26479a9ed6f61898dd1, type: 3}
---- !u!1001 &6303479203800128058
+--- !u!1001 &7265104659673728598
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -190,7 +190,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5535497854595400601, guid: 181f58a31bb4792469908e3af35b3cf4, type: 3}
       propertyPath: m_Name
-      value: KillTrigger
+      value: PF_KillTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 7656584864242249830, guid: 181f58a31bb4792469908e3af35b3cf4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -198,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7656584864242249830, guid: 181f58a31bb4792469908e3af35b3cf4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.82
+      value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 7656584864242249830, guid: 181f58a31bb4792469908e3af35b3cf4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -300,4 +300,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 5203060297215364548}
   - {fileID: 7306478685813455799}
-  - {fileID: 6303479203800128058}
+  - {fileID: 7265104659673728598}

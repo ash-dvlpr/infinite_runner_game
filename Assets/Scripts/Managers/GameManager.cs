@@ -67,8 +67,10 @@ public class GameManager : MonoBehaviour {
     private GameState HandleToMenu() {
         // Initial load 
         if (GameState.None == state) {
+            #if !UNITY_EDITOR
             SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
+            #endif
         }
         return GameState.MainMenu;
     }
