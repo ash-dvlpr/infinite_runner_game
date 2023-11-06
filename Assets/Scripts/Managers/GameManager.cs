@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour {
     private const int SCENE_ID_GAMEOVER = 3;
 
     //? State & Scores
+#if UNITY_EDITOR
+    [SerializeField] private bool overrideSceneLoading = false;
+#endif
     [SerializeField] private float platformSpeed = 5.0f;
     public float PlatformSpeed { get => platformSpeed; }
 
@@ -42,11 +45,11 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        TryChangeGameState(GameState.MainMenu);    
+        TryChangeGameState(GameState.MainMenu);
     }
 
     // ======================= Game State Code =======================
-    private void TryChangeGameState(GameState newState) { 
+    private void TryChangeGameState(GameState newState) {
         if (state == newState) return;
 
         // Finite State Machine to handle possible state changes
@@ -67,17 +70,22 @@ public class GameManager : MonoBehaviour {
     private GameState HandleToMenu() {
         if (GameState.None == state) {
             // Load Menu and background Game Scenes
-            #if !UNITY_EDITOR
+#if UNITY_EDITOR
+            if (!overrideSceneLoading) {
+                SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
+                SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
+            }
+#else
             SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
-            #endif
+#endif
         }
 
         else {
             // Load Menu Screen
             SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
             // Reload Game
-            #pragma warning disable CS0618
+#pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAME);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
         }
@@ -87,16 +95,16 @@ public class GameManager : MonoBehaviour {
     private GameState HandleToInGame() {
         if (GameState.MainMenu == state) {
             // Remove MainMenu Screen
-            #pragma warning disable CS0618
+#pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_MENU);
         }
 
         else if (GameState.GameOver == state) {
             // Remove GameOver Screen
-            #pragma warning disable CS0618
+#pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAMEOVER);
             // Reload Game
-            #pragma warning disable CS0618
+#pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAME);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
         }
@@ -114,14 +122,14 @@ public class GameManager : MonoBehaviour {
     }
 
     // ===================== Custom Events Code ======================
-    private void NotifyGameStarted() => onGameStart?.Invoke(); 
+    private void NotifyGameStarted() => onGameStart?.Invoke();
     private event Action onGameStart;
     public event Action OnGameStart {
         add    { lock(this) { onGameStart += value; } }
         remove { lock(this) { onGameStart -= value; } }
     }
-    
-    private void NotifyGameOver() => onGameOver?.Invoke(); 
+
+    private void NotifyGameOver() => onGameOver?.Invoke();
     private event Action onGameOver;
     public event Action OnGameOver {
         add    { lock(this) { onGameOver += value; } }
