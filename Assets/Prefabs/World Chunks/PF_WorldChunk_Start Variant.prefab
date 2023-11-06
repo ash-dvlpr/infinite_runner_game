@@ -82,6 +82,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2481928012753882334, guid: 9464e8b79ce626d4b81398779c5a34f6, type: 3}
+      propertyPath: isStartChunk
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2826049465870976579, guid: 9464e8b79ce626d4b81398779c5a34f6, type: 3}
       propertyPath: m_Name
       value: PF_WorldChunk_Start Variant

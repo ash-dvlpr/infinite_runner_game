@@ -48,7 +48,7 @@ public class LevelManager : MonoBehaviour {
     public static void RequestNextChunk() => Instance?.SpawnNextChunk();
     public static void ChunkSpawned(WorldChunk newChunk) {
         // Cache first chunk spawned
-        if (null != Instance && null == Instance.spawnPoint) { 
+        if (Instance && newChunk.IsStartChunk) { 
             Instance.spawnPoint = newChunk?.NextSpawnPoint ?? Instance.spawnPoint;
         }
         Instance?.NotifyChunkSpawned(newChunk);

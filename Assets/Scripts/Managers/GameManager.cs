@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -75,65 +77,71 @@ public class GameManager : MonoBehaviour {
             // Load Menu and background Game Scenes
 #if UNITY_EDITOR
             if (!overrideSceneLoading) {
-                SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
-                SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
+                LoadScene(SCENE_ID_MENU);
+                LoadScene(SCENE_ID_GAME, true);
+            }
+            else {
+                SetActiveScene(SCENE_ID_GAME);
             }
 #else
-            SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
-            SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
+            LoadScene(SCENE_ID_MENU);
+            LoadScene(SCENE_ID_GAME, true);
 #endif
         }
 
         else {
-            // Load Menu Screen
-            SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
-            // Reload Game
-            #pragma warning disable CS0618
-            SceneManager.UnloadScene(SCENE_ID_GAME);
-            SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
+            if (GameState.GameOver == state) {
+                // Remove GameOver screen
+                UnloadScene(SCENE_ID_GAMEOVER);
+            }
+         
+            // Load Game and Menu screen 
+            LoadScene(SCENE_ID_MENU);
+            ReloadScene(SCENE_ID_GAME, true);
         }
-
-        // TODO: Handle GameOver -> Menu (remove gameover screen)
 
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
         if (GameState.MainMenu == state) {
-            // Remove MainMenu Screen
-            #pragma warning disable CS0618
-            SceneManager.UnloadScene(SCENE_ID_MENU);
+            // Remove Menu screen
+            UnloadScene(SCENE_ID_MENU);
         }
-
         else if (GameState.GameOver == state) {
-            // Remove GameOver Screen
-            #pragma warning disable CS0618
-            SceneManager.UnloadScene(SCENE_ID_GAMEOVER);
-            // Reload Game
-            #pragma warning disable CS0618
-            SceneManager.UnloadScene(SCENE_ID_GAME);
-            SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
-
-            // FIXME: cleanup chunks viejos
-            // FIXMI: player animations bugged after reload
+            // Remove GameOver screen and reload Game
+            UnloadScene(SCENE_ID_GAMEOVER);
+            ReloadScene(SCENE_ID_GAME, true);
         }
 
-        // Generate the first Chunks
-        LevelManager.RequestNextChunk();
-        LevelManager.RequestNextChunk();
-
-        NotifyGameStarted();
+        DelayMethod(NotifyGameStarted);
         return GameState.InGame;
     }
     private GameState HandleToGameOver() {
-        NotifyGameOver();
         if(GameState.InGame == state) {
-            // Load GameOver Screen
-            SceneManager.LoadScene(SCENE_ID_GAMEOVER, LoadSceneMode.Additive);
+            // Load GameOver screen
+            LoadScene(SCENE_ID_GAMEOVER);
         }
 
-        
-
+        NotifyGameOver();
         return GameState.GameOver;
+    }
+
+    private static void UnloadScene(int sceneBuildIndex) {
+        SceneManager.UnloadSceneAsync(sceneBuildIndex);
+    }
+    private static void LoadScene(int sceneBuildIndex, bool setActive = false) {
+        SceneManager.LoadScene(sceneBuildIndex, LoadSceneMode.Additive);
+        if (setActive) Instance?.SetActiveScene(sceneBuildIndex);
+    }
+    private static void ReloadScene(int sceneBuildIndex, bool setActive = false) {
+        #pragma warning disable CS0618 // Type or member is obsolete
+        SceneManager.UnloadScene(sceneBuildIndex);
+        #pragma warning restore CS0618 // Type or member is obsolete
+        LoadScene(sceneBuildIndex, setActive);
+    }
+ 
+    private void SetActiveScene(int sceneBuildIndex) {
+        DelayMethod(() => { SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(sceneBuildIndex)); });
     }
 
     // ===================== Custom Events Code ======================
@@ -153,6 +161,18 @@ public class GameManager : MonoBehaviour {
 
     // ===================== Outside Facing API ======================
     public static GameState GetState() => Instance?.state ?? GameState.None;
+    /// <summary>
+    /// Delays a method invocation aproximatelly 1 frame.
+    /// </summary>
+    /// <param name="method">Code to execute.</param>
+    public static void DelayMethod(Action method) {
+        Instance?.StartCoroutine(DelayMethodCoroutine(method));
+    }
+    private static IEnumerator DelayMethodCoroutine(Action method) {
+        yield return 0;
+        method.Invoke();
+        yield break;
+    }
     public static void RestartGame() {
         Instance?.TryChangeGameState(GameState.InGame);
     }
