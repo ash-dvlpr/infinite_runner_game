@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour {
 
     private float jumpTimeCounter;
     private bool  isJumping, isRunning, isDead;
+    private Vector2 startPosition;
 
     //? Inputs & States
     bool iJumpPressed     = false;
@@ -48,6 +49,9 @@ public class PlayerController : MonoBehaviour {
             GameManager.Instance.OnGameOver  -= OnGameOver;
         }
     }
+    void Start() {
+        startPosition = transform.position;
+    }
 
     void Update() {
         if (GameManager.GetState() == GameManager.GameState.InGame) {
@@ -61,6 +65,8 @@ public class PlayerController : MonoBehaviour {
         isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
         if(GameManager.GetState() == GameManager.GameState.InGame) {
             HandleMovement();
+            var distance = transform.position.x - startPosition.x;
+            GameManager.UpdateScore(distance);
         }
     }
 

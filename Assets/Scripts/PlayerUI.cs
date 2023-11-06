@@ -16,19 +16,34 @@ public class PlayerUI : MonoBehaviour {
     //! ========================= Unity Code =========================
     void Awake() {
         // Subscribe events
-        GameManager.Instance.OnGameStart += OnGameStart;
-        GameManager.Instance.OnGameOver  += OnGameOver;
+        GameManager.Instance.OnGameStart    += OnGameStart;
+        GameManager.Instance.OnGameOver     += OnGameOver;
+        GameManager.Instance.OnScoreChanged += UpdateScore;
+    }
+
+    void Start() {
+        UpdateScore();    
     }
 
     void OnDestroy() {
         // Unsubscribe events
         if (GameManager.Instance) {
-            GameManager.Instance.OnGameStart -= OnGameStart;
-            GameManager.Instance.OnGameOver  -= OnGameOver;
+            GameManager.Instance.OnGameStart    -= OnGameStart;
+            GameManager.Instance.OnGameOver     -= OnGameOver;
+            GameManager.Instance.OnScoreChanged -= UpdateScore;
         }
     }
 
     //! ========================= Custom Code ========================
+    void UpdateScore() {
+        score.SetText($"{SCORE}\n{Mathf.FloorToInt(GameManager.Instance.Score)}");
+        coinCounter.SetText($"{GameManager.Instance.Coins}");
+        highscore.SetText(
+            GameManager.Instance.HighScore > 0 
+            ? $"{HIGHSCORE}\n{Mathf.FloorToInt(GameManager.Instance.HighScore)}" : ""
+        );
+    }
+
     void OnGameStart() {
         GUI.SetActive(true);
     }

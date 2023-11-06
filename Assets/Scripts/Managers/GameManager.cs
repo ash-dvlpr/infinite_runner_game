@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     private const int SCENE_ID_GAME     = 2;
     private const int SCENE_ID_GAMEOVER = 3;
 
-    //? State & Scores
+    //? State
 #if UNITY_EDITOR
     [SerializeField] private bool overrideSceneLoading = false;
 #endif
@@ -36,8 +36,25 @@ public class GameManager : MonoBehaviour {
         GameOver = SCENE_ID_GAMEOVER,
     }
 
-    // 
-    //PlayerPrefs.GetFloat("highscore", 0)
+    //? Scores
+    private int   _coins = 0;
+    private float _score = 0;
+
+    public int Coins { 
+        get => _coins; 
+        private set { _coins = value; NotifyScoreChanged(); } 
+    }
+    public float Score { 
+        get => _score;
+        private set { _score = value; NotifyScoreChanged(); }
+    }
+    public float HighScore {
+        get => PlayerPrefs.GetFloat("highscore", 0);
+        private set {
+            PlayerPrefs.SetFloat("highscore", value); 
+            NotifyScoreChanged();
+        }
+    }
 
     // ========================= Unity Code =========================
     void Awake() {
@@ -103,6 +120,9 @@ public class GameManager : MonoBehaviour {
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
+        Coins = 0;
+        Score = 0;
+
         if (GameState.MainMenu == state) {
             // Remove Menu screen
             UnloadScene(SCENE_ID_MENU);
@@ -120,6 +140,9 @@ public class GameManager : MonoBehaviour {
         if(GameState.InGame == state) {
             // Load GameOver screen
             LoadScene(SCENE_ID_GAMEOVER);
+
+            // Save HighScore
+            HighScore = Score;
         }
 
         NotifyGameOver();
@@ -159,8 +182,14 @@ public class GameManager : MonoBehaviour {
         remove { lock(this) { onGameOver -= value; } }
     }
 
+    private void NotifyScoreChanged() => onScoreChanged?.Invoke();
+    private event Action onScoreChanged;
+    public event Action OnScoreChanged {
+        add    { lock(this) { onScoreChanged += value; } }
+        remove { lock(this) { onScoreChanged -= value; } }
+    }
+
     // ===================== Outside Facing API ======================
-    public static GameState GetState() => Instance?.state ?? GameState.None;
     /// <summary>
     /// Delays a method invocation aproximatelly 1 frame.
     /// </summary>
@@ -172,6 +201,13 @@ public class GameManager : MonoBehaviour {
         yield return 0;
         method.Invoke();
         yield break;
+    }
+
+    public static GameState GetState() => Instance?.state ?? GameState.None;
+    public static void UpdateScore(float newScore) {
+        if (Instance) {
+            Instance.Score = newScore;
+        }
     }
     public static void RestartGame() {
         Instance?.TryChangeGameState(GameState.InGame);
