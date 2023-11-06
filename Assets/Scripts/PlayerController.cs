@@ -37,14 +37,16 @@ public class PlayerController : MonoBehaviour {
         _groundLayer = LayerMask.GetMask(GROUND_LAYER_NAME);
 
         // Subscribe events
-        GameManager.Instance.onGameStart += OnGameStart;
-        GameManager.Instance.onGameOver  += OnGameOver;
+        GameManager.Instance.OnGameStart += OnGameStart;
+        GameManager.Instance.OnGameOver  += OnGameOver;
     }
 
     void OnDestroy() {
         // Unsubscribe events
-        GameManager.Instance.onGameStart -= OnGameStart;
-        GameManager.Instance.onGameOver  -= OnGameOver;
+        if (GameManager.Instance) {
+            GameManager.Instance.OnGameStart -= OnGameStart;
+            GameManager.Instance.OnGameOver  -= OnGameOver;
+        }
     }
 
     void Update() {

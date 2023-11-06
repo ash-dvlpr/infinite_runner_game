@@ -45,10 +45,6 @@ public class GameManager : MonoBehaviour {
         TryChangeGameState(GameState.MainMenu);    
     }
 
-    void OnDestroy() {
-        state = GameState.None;    
-    }
-
     // ======================= Game State Code =======================
     private void TryChangeGameState(GameState newState) { 
         if (state == newState) return;
@@ -119,10 +115,18 @@ public class GameManager : MonoBehaviour {
 
     // ===================== Custom Events Code ======================
     private void NotifyGameStarted() => onGameStart?.Invoke(); 
-    public event Action onGameStart;
+    private event Action onGameStart;
+    public event Action OnGameStart {
+        add    { lock(this) { onGameStart += value; } }
+        remove { lock(this) { onGameStart -= value; } }
+    }
     
     private void NotifyGameOver() => onGameOver?.Invoke(); 
-    public event Action onGameOver;
+    private event Action onGameOver;
+    public event Action OnGameOver {
+        add    { lock(this) { onGameOver += value; } }
+        remove { lock(this) { onGameOver -= value; } }
+    }
 
     // ===================== Outside Facing API ======================
     public static GameState GetState() => Instance?.state ?? GameState.None;

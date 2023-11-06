@@ -31,10 +31,18 @@ public class LevelManager : MonoBehaviour {
 
     // ===================== Custom Events Code ======================
     private void NotifyChunkSpawned(WorldChunk newChunk) => onChunkSpawned?.Invoke(newChunk);
-    public event Action<WorldChunk> onChunkSpawned;
+    private event Action<WorldChunk> onChunkSpawned;
+    public event Action<WorldChunk> OnChunkSpawned {
+        add    { lock(this) { onChunkSpawned += value; } }
+        remove { lock(this) { onChunkSpawned -= value; } }
+    }
 
     private void NotifyChunkDestroyed() => onChunkDestroyed?.Invoke();
-    public event Action onChunkDestroyed;
+    private event Action onChunkDestroyed;
+    public event Action OnChunkDestroyed {
+        add    { lock(this) { onChunkDestroyed += value; } }
+        remove { lock(this) { onChunkDestroyed -= value; } }
+    }
 
     // ===================== Outside Facing API ======================
     public static void RequestNextChunk() => Instance?.SpawnNextChunk();
