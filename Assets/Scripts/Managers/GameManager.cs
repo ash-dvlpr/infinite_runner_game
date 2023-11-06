@@ -142,7 +142,9 @@ public class GameManager : MonoBehaviour {
             LoadScene(SCENE_ID_GAMEOVER);
 
             // Save HighScore
-            HighScore = Score;
+            if (Score > HighScore) { 
+                HighScore = Score; 
+            }
         }
 
         NotifyGameOver();
