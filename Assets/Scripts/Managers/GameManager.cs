@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnDestroy() {
-        //state = GameState.None;    
+        state = GameState.None;    
     }
 
     // ======================= Game State Code =======================

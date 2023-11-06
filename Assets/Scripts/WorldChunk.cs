@@ -16,8 +16,10 @@ public class WorldChunk : MonoBehaviour {
         _rb = GetComponent<Rigidbody2D>();
 
         // Subscribe events
-        GameManager.Instance.onGameStart   += OnGameStart;
-        GameManager.Instance.onGameOver    += OnGameOver;
+        if (null != GameManager.Instance) {
+            GameManager.Instance.onGameStart += OnGameStart;
+            GameManager.Instance.onGameOver += OnGameOver;
+        }
     }
 
     void Start() {
@@ -33,8 +35,10 @@ public class WorldChunk : MonoBehaviour {
     void OnDestroy() {
         LevelManager.ChunkDestroyed();
         // Unsubscribe events
-        GameManager.Instance.onGameStart   -= OnGameStart;
-        GameManager.Instance.onGameOver    -= OnGameOver;
+        if (null != GameManager.Instance) {
+            GameManager.Instance.onGameStart -= OnGameStart;
+            GameManager.Instance.onGameOver  -= OnGameOver;
+        }
     }
 
     //! ========================= Custom Code ========================
