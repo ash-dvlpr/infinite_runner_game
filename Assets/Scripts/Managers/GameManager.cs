@@ -1,18 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// This class is in charge of managing the game's state and doing all the scene loading/unloading.
+/// This class is in charge of managing the game's state and doing all the scene loading/unloading. <br/><br/>
 /// 
-/// Also, this singleton class act's as a <b>service locator</b> to integrate other systems. <br/>
-/// 
-/// 
-/// <br/>TODO: Game will start on an empty scene with a GameManager with state 0. And from there load the main menu and manage unloading/loading new scenes.
+/// On top of that this <b>master</b> controller uses an Event system to integrate with other scripts and avoid sincronization errors.
 /// </summary>
 public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
@@ -24,6 +20,9 @@ public class GameManager : MonoBehaviour {
     private const int SCENE_ID_GAMEOVER = 3;
 
     //? State & Scores
+    [SerializeField] private float platformSpeed = 5.0f;
+    public float PlatformSpeed { get => platformSpeed; }
+
     private GameState state = 0;
     public enum GameState : int {
         None     = SCENE_ID_MAIN,
@@ -46,6 +45,10 @@ public class GameManager : MonoBehaviour {
         TryChangeGameState(GameState.MainMenu);    
     }
 
+    void OnDestroy() {
+        //state = GameState.None;    
+    }
+
     // ======================= Game State Code =======================
     private void TryChangeGameState(GameState newState) { 
         if (state == newState) return;
@@ -66,60 +69,67 @@ public class GameManager : MonoBehaviour {
     }
 
     private GameState HandleToMenu() {
-        // Initial load 
         if (GameState.None == state) {
+            // Load Menu and background Game Scenes
             #if !UNITY_EDITOR
             SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
             #endif
         }
+
         else {
+            // Load Menu Screen
             SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
+            // Reload Game
+            #pragma warning disable CS0618
+            SceneManager.UnloadScene(SCENE_ID_GAME);
+            SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
         }
+
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
-        // Hide Menus
         if (GameState.MainMenu == state) {
+            // Remove MainMenu Screen
+            #pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_MENU);
-            TriggerGameStartEvents();
         }
 
         else if (GameState.GameOver == state) {
+            // Remove GameOver Screen
+            #pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAMEOVER);
-            TriggerGameRestartEvents();
+            // Reload Game
+            #pragma warning disable CS0618
+            SceneManager.UnloadScene(SCENE_ID_GAME);
+            SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
         }
 
+        // Generate the first Chunks
+        LevelManager.RequestNextChunk();
+        LevelManager.RequestNextChunk();
+
+        NotifyGameStarted();
         return GameState.InGame;
     }
     private GameState HandleToGameOver() {
-        TriggerGameOverEvents();
+        NotifyGameOver();
         return GameState.GameOver;
     }
 
+    // ===================== Custom Events Code ======================
+    private void NotifyGameStarted() => onGameStart?.Invoke(); 
+    public event Action onGameStart;
+    
+    private void NotifyGameOver() => onGameOver?.Invoke(); 
+    public event Action onGameOver;
+
     // ===================== Outside Facing API ======================
-    public static GameState GetState() => Instance.state;
+    public static GameState GetState() => Instance?.state ?? GameState.None;
     public static void RestartGame() {
-        Instance.TryChangeGameState(GameState.InGame);
+        Instance?.TryChangeGameState(GameState.InGame);
     }
     public static void GameOver() {
-        Instance.TryChangeGameState(GameState.GameOver);
+        Instance?.TryChangeGameState(GameState.GameOver);
     }
-
-    // ===================== Custom Events Code ======================
-    public event Action onGameStart;
-    private void TriggerGameStartEvents() {
-        Instance?.onGameStart(); 
-    }
-    
-    public event Action onGameOver;
-    private void TriggerGameOverEvents() {
-        Instance?.onGameOver(); 
-    }
-
-    public event Action onGameRestart;
-    private void TriggerGameRestartEvents() {
-        Instance?.onGameRestart(); 
-    }
-
 }

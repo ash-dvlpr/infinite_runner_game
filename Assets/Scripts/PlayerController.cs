@@ -39,14 +39,12 @@ public class PlayerController : MonoBehaviour {
         // Subscribe events
         GameManager.Instance.onGameStart   += OnGameStart;
         GameManager.Instance.onGameOver    += OnGameOver;
-        GameManager.Instance.onGameRestart += OnGameRestart;
     }
 
     void OnDestroy() {
         // Unsubscribe events
         GameManager.Instance.onGameStart   -= OnGameStart;
         GameManager.Instance.onGameOver    -= OnGameOver;
-        GameManager.Instance.onGameRestart -= OnGameRestart;
     }
 
     void Update() {
@@ -74,11 +72,6 @@ public class PlayerController : MonoBehaviour {
     void OnGameOver() {
         isRunning = false;
         isDead = true;
-    }
-
-    void OnGameRestart() {
-        isRunning = true;
-        isDead = false;
     }
 
     void UpdateInputs() {
