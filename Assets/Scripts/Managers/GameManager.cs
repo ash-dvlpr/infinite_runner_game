@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour {
         GameOver = SCENE_ID_GAMEOVER,
     }
 
+    // 
+    //PlayerPrefs.GetFloat("highscore", 0)
+
     // ========================= Unity Code =========================
     void Awake() {
         // Mantain a single Instance
@@ -85,28 +88,33 @@ public class GameManager : MonoBehaviour {
             // Load Menu Screen
             SceneManager.LoadScene(SCENE_ID_MENU, LoadSceneMode.Additive);
             // Reload Game
-#pragma warning disable CS0618
+            #pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAME);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
         }
+
+        // TODO: Handle GameOver -> Menu (remove gameover screen)
 
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
         if (GameState.MainMenu == state) {
             // Remove MainMenu Screen
-#pragma warning disable CS0618
+            #pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_MENU);
         }
 
         else if (GameState.GameOver == state) {
             // Remove GameOver Screen
-#pragma warning disable CS0618
+            #pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAMEOVER);
             // Reload Game
-#pragma warning disable CS0618
+            #pragma warning disable CS0618
             SceneManager.UnloadScene(SCENE_ID_GAME);
             SceneManager.LoadScene(SCENE_ID_GAME, LoadSceneMode.Additive);
+
+            // FIXME: cleanup chunks viejos
+            // FIXMI: player animations bugged after reload
         }
 
         // Generate the first Chunks
@@ -118,6 +126,13 @@ public class GameManager : MonoBehaviour {
     }
     private GameState HandleToGameOver() {
         NotifyGameOver();
+        if(GameState.InGame == state) {
+            // Load GameOver Screen
+            SceneManager.LoadScene(SCENE_ID_GAMEOVER, LoadSceneMode.Additive);
+        }
+
+        
+
         return GameState.GameOver;
     }
 
@@ -143,5 +158,8 @@ public class GameManager : MonoBehaviour {
     }
     public static void GameOver() {
         Instance?.TryChangeGameState(GameState.GameOver);
+    }
+    public static void ToMainMenu() {
+        Instance?.TryChangeGameState(GameState.MainMenu);
     }
 }

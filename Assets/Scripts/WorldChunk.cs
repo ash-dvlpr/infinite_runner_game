@@ -14,36 +14,15 @@ public class WorldChunk : MonoBehaviour {
     //! ========================= Unity Code =========================
     void Awake() {
         _rb = GetComponent<Rigidbody2D>();
-
-        // Subscribe events
-        GameManager.Instance.OnGameStart += OnGameStart;
-        GameManager.Instance.OnGameOver  += OnGameOver;
     }
 
     void Start() {
         LevelManager.ChunkSpawned(this);
     }
 
-    void Update() {
-        if (GameManager.GetState() == GameManager.GameState.InGame) { 
-            _rb.velocity = Vector3.left * GameManager.Instance.PlatformSpeed;
-        }
-    }
-
     void OnDestroy() {
-        LevelManager.ChunkDestroyed();
-        // Unsubscribe events
-        if (GameManager.Instance) {
-            GameManager.Instance.OnGameStart -= OnGameStart;
-            GameManager.Instance.OnGameOver  -= OnGameOver;
+        if (GameManager.GetState() == GameManager.GameState.InGame) { 
+            LevelManager.ChunkDestroyed();
         }
-    }
-
-    //! ========================= Custom Code ========================
-    void OnGameStart() {
-        _rb.simulated = true;
-    }
-    void OnGameOver() {
-        _rb.simulated = false;
     }
 }

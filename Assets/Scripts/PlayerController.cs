@@ -59,6 +59,9 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate() {
         isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
+        if(GameManager.GetState() == GameManager.GameState.InGame) {
+            HandleMovement();
+        }
     }
 
     void OnDrawGizmos() {
@@ -68,12 +71,14 @@ public class PlayerController : MonoBehaviour {
 
     //! ========================= Custom Code ========================
     void OnGameStart() {
-        isRunning = true;
         isDead = false;
+        isRunning = true;
+        _rb.simulated = true;
     }
     void OnGameOver() {
-        isRunning = false;
         isDead = true;
+        isRunning = false;
+        _rb.simulated = false;
     }
 
     void UpdateInputs() {
@@ -109,6 +114,9 @@ public class PlayerController : MonoBehaviour {
 
         // Update gravity when jumping/falling
         _rb.gravityScale = iJumpPressed && isJumping ? jumpGravity : fallGravity;
+    }
+    private void HandleMovement() {
+        _rb.velocity = new Vector2(Vector2.right.x * GameManager.Instance.PlatformSpeed, _rb.velocity.y);
     }
     void UpdateAnimationState() {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);

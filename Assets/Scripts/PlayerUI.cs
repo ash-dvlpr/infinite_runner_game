@@ -8,6 +8,7 @@ public class PlayerUI : MonoBehaviour {
     private static string SCORE = "SCORE", HIGHSCORE = "RECORD";
     //! ========================= Variables ==========================
     //? References
+    [SerializeField] GameObject GUI;
     [SerializeField] TMP_Text score;
     [SerializeField] TMP_Text highscore;
     [SerializeField] TMP_Text coinCounter;
@@ -29,11 +30,9 @@ public class PlayerUI : MonoBehaviour {
 
     //! ========================= Custom Code ========================
     void OnGameStart() {
-        score.enabled = true;
-        // TODO
+        GUI.SetActive(true);
     }
     void OnGameOver() {
-        score.enabled = false;
-        // TODO
+        GUI.SetActive(false);
     }
 }
