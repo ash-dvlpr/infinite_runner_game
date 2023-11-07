@@ -30,7 +30,7 @@ public class Collectable : MonoBehaviour {
         } 
     }
 
-    // ========================= Custom Code =========================
+    // ========================= Custom Code ========================
     public void Collect(PlayerController player) {
         if (!IsCollected) { 
             IsCollected = true;

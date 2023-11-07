@@ -21,7 +21,7 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    // ========================= Custom Code =========================
+    // ========================= Custom Code ========================
     private void SpawnNextChunk() {
         var variant = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
         var chunk = Instantiate(variant, spawnPoint.transform.position, Quaternion.identity);

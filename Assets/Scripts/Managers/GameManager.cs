@@ -1,16 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
 /// This class is in charge of managing the game's state and doing all the scene loading/unloading. <br/><br/>
-/// 
-/// On top of that this <b>master</b> controller uses an Event system to integrate with other scripts and avoid sincronization errors.
 /// </summary>
 public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
