@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour {
 
     // ===================== Outside Facing API ======================
     public void AddScore(int value) {
-        GameManager.AddCoins(value);
+        GameManager.AddScore(value);
     }
     public void AddHealth(int value) {
         Health += value;

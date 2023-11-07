@@ -37,7 +37,7 @@ public class PlayerUI : MonoBehaviour {
     //! ========================= Custom Code ========================
     void UpdateScore() {
         score.SetText($"{SCORE}\n{Mathf.FloorToInt(GameManager.Instance.Score)}");
-        coinCounter.SetText($"{GameManager.Instance.Coins}");
+        coinCounter.SetText($"{GameManager.Instance.ItemScore}");
         highscore.SetText(
             GameManager.Instance.HighScore > 0 
             ? $"{HIGHSCORE}\n{Mathf.FloorToInt(GameManager.Instance.HighScore)}" : ""

@@ -5,19 +5,19 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "CollectibleItem", menuName = "Collectibles/Item Definition", order = 1)]
 public class SO_CollectibleItem : ScriptableObject {
-    public enum ItemType : uint {
+    public enum ResourceType : uint {
         None   = 0,
-        COIN   = 1,
-        HEALTH = 2, 
+        Score  = 1,
+        Health = 2, 
     }
 
     // ========================= Variables ==========================
-    [SerializeField] private int       resourceAmount   = 0;
-    [SerializeField] private ItemType  resourceType     = ItemType.COIN;
-    [SerializeField] private AudioClip interactionSound = null;
+    [SerializeField] private ResourceType  resource;
+    [SerializeField] private int       resourceAmount;
+    [SerializeField] private AudioClip interactionSound;
 
     #region "Properties"
-    public ItemType ResourceType { get => resourceType; }
+    public ResourceType Resource { get => resource; }
     public int GrantedStatAmount { get => resourceAmount; }
     public AudioClip InteractionSound { get => interactionSound; }
 
@@ -27,9 +27,9 @@ public class SO_CollectibleItem : ScriptableObject {
     // ========================= Unity Code =========================
     // ========================= Custom Code =========================
     public virtual void Collect(PlayerController player) {
-        switch (ResourceType) {
-            case ItemType.COIN:  player.AddScore(GrantedStatAmount);  break;
-            case ItemType.HEALTH: player.AddHealth(GrantedStatAmount); break;
+        switch (Resource) {
+            case ResourceType.Score:  player.AddScore(GrantedStatAmount);  break;
+            case ResourceType.Health: player.AddHealth(GrantedStatAmount); break;
         }
 
         if (InteractionSound) { 

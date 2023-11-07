@@ -37,19 +37,20 @@ public class GameManager : MonoBehaviour {
     }
 
     //? Scores
-    private int   _coins = 0;
+    private int   _itemScore = 0;
     private float _distanceTraveled = 0;
+
 
     public float DistanceTraveled {
         get => _distanceTraveled;
         private set { _distanceTraveled = value; NotifyScoreChanged(); }
     }
-    public float Score { 
-        get => _distanceTraveled + (_coins * difficultySettings?.CoinScoreValue ?? 1);
+    public int ItemScore { 
+        get => _itemScore; 
+        private set { _itemScore = value; NotifyScoreChanged(); } 
     }
-    public int Coins { 
-        get => _coins; 
-        private set { _coins = value; NotifyScoreChanged(); } 
+    public float Score { 
+        get => DistanceTraveled + ItemScore;
     }
     public float HighScore {
         get => PlayerPrefs.GetFloat("highscore", 0);
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviour {
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
-        Coins = 0;
+        ItemScore = 0;
         DistanceTraveled = 0;
 
         if (GameState.MainMenu == state) {
@@ -214,9 +215,9 @@ public class GameManager : MonoBehaviour {
             Instance.DistanceTraveled = newDistanceTraveled;
         }
     }
-    public static void AddCoins(int coinsAmount) {
+    public static void AddScore(int scoreAmount) {
         if (Instance) {
-            Instance.Coins += coinsAmount;
+            Instance.ItemScore += scoreAmount;
         }
     }
     public static void RestartGame() {

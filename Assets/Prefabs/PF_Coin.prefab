@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4837623941945378709}
   - component: {fileID: 5907532089882979137}
+  - component: {fileID: 1459606929550681110}
   - component: {fileID: 3624534575762292685}
   - component: {fileID: 4787757758671339451}
-  - component: {fileID: 1459606929550681110}
   m_Layer: 0
   m_Name: PF_Coin
   m_TagString: Untagged
@@ -87,6 +87,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1459606929550681110
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44808621849983044}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 00d8e862ee0e07b4c9ee8cd012b9472c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!70 &3624534575762292685
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -135,24 +156,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDefinition: {fileID: 11400000, guid: f35fec72735167c47913be8dff53f5aa, type: 2}
---- !u!95 &1459606929550681110
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 44808621849983044}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 00d8e862ee0e07b4c9ee8cd012b9472c, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

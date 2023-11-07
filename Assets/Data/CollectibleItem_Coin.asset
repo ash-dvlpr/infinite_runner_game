@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3559171c8d555e04a883f66a24cfe771, type: 3}
   m_Name: CollectibleItem_Coin
   m_EditorClassIdentifier: 
-  resourceAmount: 1
-  itemType: 1
+  resource: 1
+  resourceAmount: 10
   interactionSound: {fileID: 0}
