@@ -139,6 +139,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     // ===================== Outside Facing API ======================
+    public void AddCoins(int value) {
+        GameManager.AddCoins(value);
+    }
     public void AddScore(int value) {
         GameManager.AddScore(value);
     }

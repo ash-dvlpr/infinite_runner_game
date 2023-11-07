@@ -8,7 +8,11 @@ public class PlayerUI : MonoBehaviour {
     private static string SCORE = "SCORE", HIGHSCORE = "RECORD";
     //! ========================= Variables ==========================
     //? References
-    [SerializeField] GameObject GUI;
+    [Header("General Configuration")]
+    [SerializeField] bool isGameOverScreen;
+    [SerializeField] GameObject uiRoot;
+
+    [Header("UI Text Fields")]
     [SerializeField] TMP_Text score;
     [SerializeField] TMP_Text highscore;
     [SerializeField] TMP_Text coinCounter;
@@ -36,18 +40,18 @@ public class PlayerUI : MonoBehaviour {
 
     //! ========================= Custom Code ========================
     void UpdateScore() {
-        score.SetText($"{SCORE}\n{Mathf.FloorToInt(GameManager.Instance.Score)}");
-        coinCounter.SetText($"{GameManager.Instance.ItemScore}");
-        highscore.SetText(
+        score?.SetText($"{SCORE}\n{Mathf.FloorToInt(GameManager.Instance.Score)}");
+        coinCounter?.SetText($"{GameManager.Instance.Coins}");
+        highscore?.SetText(
             GameManager.Instance.HighScore > 0 
             ? $"{HIGHSCORE}\n{Mathf.FloorToInt(GameManager.Instance.HighScore)}" : ""
         );
     }
 
     void OnGameStart() {
-        GUI.SetActive(true);
+        uiRoot?.SetActive(!isGameOverScreen);
     }
     void OnGameOver() {
-        GUI.SetActive(false);
+        uiRoot?.SetActive(isGameOverScreen);
     }
 }

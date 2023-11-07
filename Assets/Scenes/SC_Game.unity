@@ -411,7 +411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfca36e6685c0b64bbf949024af638dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GUI: {fileID: 838365656}
+  isGameOverScreen: 0
+  uiRoot: {fileID: 838365656}
   score: {fileID: 741221870}
   highscore: {fileID: 546351767}
   coinCounter: {fileID: 942826313}

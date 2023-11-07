@@ -37,9 +37,8 @@ public class GameManager : MonoBehaviour {
     }
 
     //? Scores
-    private int   _itemScore = 0;
+    private int   _itemScore = 0, _coins = 0;
     private float _distanceTraveled = 0;
-
 
     public float DistanceTraveled {
         get => _distanceTraveled;
@@ -48,6 +47,10 @@ public class GameManager : MonoBehaviour {
     public int ItemScore { 
         get => _itemScore; 
         private set { _itemScore = value; NotifyScoreChanged(); } 
+    }
+    public int Coins { 
+        get => _coins; 
+        private set { _coins = value; NotifyScoreChanged(); } 
     }
     public float Score { 
         get => DistanceTraveled + ItemScore;
@@ -124,8 +127,9 @@ public class GameManager : MonoBehaviour {
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
-        ItemScore = 0;
         DistanceTraveled = 0;
+        ItemScore = 0;
+        Coins = 0;
 
         if (GameState.MainMenu == state) {
             // Remove Menu screen
@@ -218,6 +222,11 @@ public class GameManager : MonoBehaviour {
     public static void AddScore(int scoreAmount) {
         if (Instance) {
             Instance.ItemScore += scoreAmount;
+        }
+    }
+    public static void AddCoins(int coinsAmount) {
+        if (Instance) {
+            Instance.Coins += coinsAmount;
         }
     }
     public static void RestartGame() {

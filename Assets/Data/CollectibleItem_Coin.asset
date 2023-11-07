@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: CollectibleItem_Coin
   m_EditorClassIdentifier: 
   resource: 1
-  resourceAmount: 10
+  resourceAmount: 1
+  grantedScore: 10
   interactionSound: {fileID: 0}
