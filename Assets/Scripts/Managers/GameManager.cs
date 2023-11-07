@@ -25,8 +25,8 @@ public class GameManager : MonoBehaviour {
 #if UNITY_EDITOR
     [SerializeField] private bool overrideSceneLoading = false;
 #endif
-    [SerializeField] private float platformSpeed = 5.0f;
-    public float PlatformSpeed { get => platformSpeed; }
+    [SerializeField] SO_DifficultySetting difficultySettings;
+    public float PlatformSpeed { get => difficultySettings?.PlatformSpeed ?? 5.0f; }
 
     private GameState state = 0;
     public enum GameState : int {
@@ -38,15 +38,18 @@ public class GameManager : MonoBehaviour {
 
     //? Scores
     private int   _coins = 0;
-    private float _score = 0;
+    private float _distanceTraveled = 0;
 
+    public float DistanceTraveled {
+        get => _distanceTraveled;
+        private set { _distanceTraveled = value; NotifyScoreChanged(); }
+    }
+    public float Score { 
+        get => _distanceTraveled + (_coins * difficultySettings?.CoinScoreValue ?? 1);
+    }
     public int Coins { 
         get => _coins; 
         private set { _coins = value; NotifyScoreChanged(); } 
-    }
-    public float Score { 
-        get => _score;
-        private set { _score = value; NotifyScoreChanged(); }
     }
     public float HighScore {
         get => PlayerPrefs.GetFloat("highscore", 0);
@@ -121,7 +124,7 @@ public class GameManager : MonoBehaviour {
     }
     private GameState HandleToInGame() {
         Coins = 0;
-        Score = 0;
+        DistanceTraveled = 0;
 
         if (GameState.MainMenu == state) {
             // Remove Menu screen
@@ -206,9 +209,14 @@ public class GameManager : MonoBehaviour {
     }
 
     public static GameState GetState() => Instance?.state ?? GameState.None;
-    public static void UpdateScore(float newScore) {
+    public static void UpdateDistanceTraveled(float newDistanceTraveled) {
         if (Instance) {
-            Instance.Score = newScore;
+            Instance.DistanceTraveled = newDistanceTraveled;
+        }
+    }
+    public static void AddCoins(int coinsAmount) {
+        if (Instance) {
+            Instance.Coins += coinsAmount;
         }
     }
     public static void RestartGame() {

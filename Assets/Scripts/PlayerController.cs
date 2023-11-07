@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour {
 
     //! ========================= Variables ==========================
     //? JUMP
+    [Header("Difficulty/Survivavility")]
+    [SerializeField] private int maxHealth;
+
     [Header("Jump Configuration")]
     [SerializeField] private float groundDetectionRange =  1.1f;
     [SerializeField] private float jumpForce            = 11.0f;
@@ -18,9 +21,14 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float fallGravity          =  3.0f;
     [SerializeField] private float jumpMaxTime          =  0.2f;
 
-    private float jumpTimeCounter;
+    private float jumpTimeCounter, distanceTraveled;
     private bool  isJumping, isRunning, isDead;
     private Vector2 startPosition;
+    private int health;
+    public int Health {
+        get => health; 
+        set { health = Mathf.Clamp(value, 0, maxHealth); }
+    }
 
     //? Inputs & States
     bool iJumpPressed     = false;
@@ -65,8 +73,8 @@ public class PlayerController : MonoBehaviour {
         isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
         if(GameManager.GetState() == GameManager.GameState.InGame) {
             HandleMovement();
-            var distance = transform.position.x - startPosition.x;
-            GameManager.UpdateScore(distance);
+            distanceTraveled = transform.position.x - startPosition.x;
+            GameManager.UpdateDistanceTraveled(distanceTraveled);
         }
     }
 
@@ -128,5 +136,13 @@ public class PlayerController : MonoBehaviour {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
         _animator.SetBool(ANIM_ID_PARAM_RUNNING,  isRunning);
         _animator.SetBool(ANIM_ID_PARAM_DEAD,     isDead);
+    }
+
+    // ===================== Outside Facing API ======================
+    public void AddScore(int value) {
+        GameManager.AddCoins(value);
+    }
+    public void AddHealth(int value) {
+        Health += value;
     }
 }
