@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c4278a56a9d83498ed851f7ebc78a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 6
   groundDetectionRange: 1.1
   jumpForce: 11
   jumpGravity: 1

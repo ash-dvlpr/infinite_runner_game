@@ -11,9 +11,6 @@ public class PlayerController : MonoBehaviour {
 
     //! ========================= Variables ==========================
     //? JUMP
-    [Header("Difficulty/Survivavility")]
-    [SerializeField] private int maxHealth;
-
     [Header("Jump Configuration")]
     [SerializeField] private float groundDetectionRange =  1.1f;
     [SerializeField] private float jumpForce            = 11.0f;
@@ -21,18 +18,21 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float fallGravity          =  3.0f;
     [SerializeField] private float jumpMaxTime          =  0.2f;
 
-    private float jumpTimeCounter, distanceTraveled;
-    private bool  isJumping, isRunning, isDead;
-    private Vector2 startPosition;
-    private int health;
+
+    //? Internal
+    private float distanceTraveled;
+    private int _health;
     public int Health {
-        get => health; 
-        set { health = Mathf.Clamp(value, 0, maxHealth); }
+        get => _health; 
+        set { _health = Mathf.Clamp(value, 0, GameManager.GetDifficultySettings.PlayerMaxHealth); }
     }
 
     //? Inputs & States
     bool iJumpPressed     = false;
     bool isTouchingGround = false;
+    private Vector2 startPosition;
+    private bool  isJumping, isRunning, isDead;
+    private float jumpTimeCounter;
 
     //? References & Components
     Rigidbody2D _rb;

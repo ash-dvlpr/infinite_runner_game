@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
 #if UNITY_EDITOR
     [SerializeField] private bool overrideSceneLoading = false;
 #endif
-    [SerializeField] SO_DifficultySetting difficultySettings;
+    [SerializeField] SO_DifficultySettings difficultySettings;
     public float PlatformSpeed { get => difficultySettings?.PlatformSpeed ?? 5.0f; }
 
     private GameState state = 0;
@@ -214,6 +214,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public static GameState GetState() => Instance?.state ?? GameState.None;
+    public static SO_DifficultySettings GetDifficultySettings => Instance?.difficultySettings;
     public static void UpdateDistanceTraveled(float newDistanceTraveled) {
         if (Instance) {
             Instance.DistanceTraveled = newDistanceTraveled;
