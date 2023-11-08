@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float fallGravity          =  3.0f;
     [SerializeField] private float jumpMaxTime          =  0.2f;
 
+    //? Interactions
     [Header("Sounds")]
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private AudioClip deathSound;
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour {
     bool iJumpPressed     = false;
     bool isTouchingGround = false;
     private Vector2 startPosition;
-    private bool  isJumping, isRunning, isDead;
+    private bool  isJumping, isRunning, isDead, isInvulnerable;
     private float jumpTimeCounter;
 
     //? References & Components
@@ -112,6 +113,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    void ResetInvulneravility() {
+        isInvulnerable = false;
+    }
+
     void UpdateInputs() {
 #if UNITY_STANDALONE || UNITY_EDITOR
         // PC specific code
@@ -172,5 +177,13 @@ public class PlayerController : MonoBehaviour {
     }
     public void AddHealth(int value) {
         Health += value;
+    }
+    public void DealDamage(int value) {
+        if (!isInvulnerable) {
+            Health -= value;
+            isInvulnerable = true;
+            Debug.Log("Damaged");
+            Invoke("ResetInvulneravility", GameManager.GetDifficultySettings.PlayerInvulnerabilityTime);
+        }
     }
 }
