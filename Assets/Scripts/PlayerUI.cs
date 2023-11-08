@@ -26,7 +26,8 @@ public class PlayerUI : MonoBehaviour {
     }
 
     void Start() {
-        UpdateScore();    
+        UpdateScore();
+        uiRoot?.SetActive(false);
     }
 
     void OnDestroy() {

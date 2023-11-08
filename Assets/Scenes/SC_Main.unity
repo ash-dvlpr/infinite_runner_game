@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264f9c83d109a794fa3bc3c1ba442029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideSceneLoading: 1
+  overrideSceneLoading: 0
   difficultySettings: {fileID: 11400000, guid: a1f8cca2500c29d41862240a335b94e2, type: 2}
 --- !u!1 &1432705523
 GameObject:
