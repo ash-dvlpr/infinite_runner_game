@@ -8,7 +8,6 @@ public class SoundManager : MonoBehaviour {
     // ========================= Variables ==========================
     [SerializeField] SO_AudioSettings audioSettings;
 
-
     //? References  & Components
     // TODO: AudioSource pooling
     AudioSource audioSource;
