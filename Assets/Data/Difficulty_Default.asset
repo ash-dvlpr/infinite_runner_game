@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c48ba63ba22b8458be4804fcf12d3a, type: 3}
   m_Name: Difficulty_Default
   m_EditorClassIdentifier: 
-  coinScoreValue: 10
   platformSpeed: 5
+  playerMaxHealth: 6
