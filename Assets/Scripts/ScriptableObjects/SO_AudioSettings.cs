@@ -18,7 +18,7 @@ public class SO_AudioSettings : ScriptableObject {
     // ========================= Custom Code ========================
     public enum ClipType : uint {
         Music  = 0,
-        Effect = 1,
+        Sound = 1,
     }
 
     [System.Serializable]
@@ -26,16 +26,18 @@ public class SO_AudioSettings : ScriptableObject {
         [SerializeField]                     private ClipType  type;
         [SerializeField]                     private AudioClip clip;
         [SerializeField] [Range(0.0f, 1.0f)] private float     volume;
+        [SerializeField]                     private bool      loop;
 
         public AudioClip Clip { get => clip; }
         public ClipType Type { get => type; }
         public float Volume { get => volume; }
+        public bool Loop { get => loop; }
     }
 
     // ===================== Outside Facing API ======================
     public ClipConfig FindClipConfig(AudioClip clip) {
         return ClipConfigs.Where((config) => { 
             return config.Clip == clip; 
-        }).FirstOrDefault(null);
+        }).FirstOrDefault();
     }
 }

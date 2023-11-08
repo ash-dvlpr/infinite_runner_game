@@ -12,4 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba664b7c51a30c4a9a024f9dfa41af9, type: 3}
   m_Name: AudioSettings
   m_EditorClassIdentifier: 
-  clipConfigs: []
+  clipConfigs:
+  - type: 0
+    clip: {fileID: 8300000, guid: c8cd353cac1a0b745906d70e47ab7b41, type: 3}
+    volume: 1
+    loop: 1
+  - type: 0
+    clip: {fileID: 8300000, guid: 54b125f0e35695c43a94f7749369f4c9, type: 3}
+    volume: 1
+    loop: 1
+  - type: 0
+    clip: {fileID: 8300000, guid: f6bae52b346f1cf43a02fe7f0d14d08b, type: 3}
+    volume: 1
+    loop: 0
+  - type: 1
+    clip: {fileID: 8300000, guid: b91230dcb2540ee4abc4a90bdaf1f16e, type: 3}
+    volume: 1
+    loop: 0
+  - type: 1
+    clip: {fileID: 8300000, guid: 5bd1b87af44a199479ff39980ba2497a, type: 3}
+    volume: 1
+    loop: 0
+  - type: 1
+    clip: {fileID: 8300000, guid: 878adcbb2500b5c4e9a1051300931568, type: 3}
+    volume: 1
+    loop: 0

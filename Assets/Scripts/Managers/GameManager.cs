@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour {
             ReloadScene(SCENE_ID_GAME, true);
         }
 
+        NotifyMenuLoaded();
         return GameState.MainMenu;
     }
     private GameState HandleToInGame() {
@@ -174,6 +175,13 @@ public class GameManager : MonoBehaviour {
     }
 
     // ===================== Custom Events Code ======================
+    private void NotifyMenuLoaded() => onMenuLoaded?.Invoke();
+    private event Action onMenuLoaded;
+    public event Action OnMenuLoaded {
+        add    { lock(this) { onMenuLoaded += value; } }
+        remove { lock(this) { onMenuLoaded -= value; } }
+    }
+
     private void NotifyGameStarted() => onGameStart?.Invoke();
     private event Action onGameStart;
     public event Action OnGameStart {
