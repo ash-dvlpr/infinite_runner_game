@@ -27,7 +27,7 @@ MonoBehaviour:
     loop: 0
   - type: 1
     clip: {fileID: 8300000, guid: b91230dcb2540ee4abc4a90bdaf1f16e, type: 3}
-    volume: 1
+    volume: 0.5
     loop: 0
   - type: 1
     clip: {fileID: 8300000, guid: 5bd1b87af44a199479ff39980ba2497a, type: 3}
@@ -35,5 +35,9 @@ MonoBehaviour:
     loop: 0
   - type: 1
     clip: {fileID: 8300000, guid: 878adcbb2500b5c4e9a1051300931568, type: 3}
+    volume: 0.5
+    loop: 0
+  - type: 1
+    clip: {fileID: 8300000, guid: ce4de687c5afce942bcfa496ba04a315, type: 3}
     volume: 0.6
     loop: 0

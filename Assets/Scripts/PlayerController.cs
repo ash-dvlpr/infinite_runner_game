@@ -91,12 +91,25 @@ public class PlayerController : MonoBehaviour {
         isDead = false;
         isRunning = true;
         _rb.simulated = true;
+
+        Health = GameManager.GetDifficultySettings.PlayerMaxHealth;
+        // Start corroutines
+        StartCoroutine(DrainHealth());
     }
     void OnGameOver() {
         SoundManager.PlayClip(deathSound);
         isDead = true;
         isRunning = false;
         _rb.simulated = false;
+        // Stop corroutines
+        StopAllCoroutines();
+    }
+
+    IEnumerator DrainHealth() {
+        while(true) {
+            yield return new WaitForSeconds(GameManager.GetDifficultySettings.PlayerHealthDrainRate);
+            Health--;
+        }
     }
 
     void UpdateInputs() {
@@ -135,7 +148,7 @@ public class PlayerController : MonoBehaviour {
         _rb.gravityScale = iJumpPressed && isJumping ? jumpGravity : fallGravity;
     }
     private void HandleMovement() {
-        _rb.velocity = new Vector2(Vector2.right.x * GameManager.Instance.PlatformSpeed, _rb.velocity.y);
+        _rb.velocity = new Vector2(GameManager.Instance.PlatformSpeed, _rb.velocity.y);
     }
     void UpdateAnimationState() {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
