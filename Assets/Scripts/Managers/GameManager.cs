@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
+    public static bool ApplicationIsQuitting { get; private set; } = false;
 
     // ========================= Variables ==========================
     private const int SCENE_ID_MAIN     = 0;
@@ -71,6 +72,12 @@ public class GameManager : MonoBehaviour {
 
     void Start() {
         TryChangeGameState(GameState.MainMenu);
+    }
+    void OnApplicationQuit() {
+        ApplicationIsQuitting = true;
+    }
+    void OnDestroy() {
+        StopAllCoroutines();    
     }
 
     // ======================= Game State Code =======================
@@ -175,32 +182,48 @@ public class GameManager : MonoBehaviour {
     }
 
     // ===================== Custom Events Code ======================
-    private void NotifyMenuLoaded() => onMenuLoaded?.Invoke();
     private event Action onMenuLoaded;
     public event Action OnMenuLoaded {
         add    { lock(this) { onMenuLoaded += value; } }
         remove { lock(this) { onMenuLoaded -= value; } }
     }
+    private void NotifyMenuLoaded() {
+        if (!ApplicationIsQuitting) {
+            onMenuLoaded?.Invoke();
+        }
+    }
 
-    private void NotifyGameStarted() => onGameStart?.Invoke();
     private event Action onGameStart;
     public event Action OnGameStart {
         add    { lock(this) { onGameStart += value; } }
         remove { lock(this) { onGameStart -= value; } }
     }
+    private void NotifyGameStarted() { 
+        if (!ApplicationIsQuitting) {
+            onGameStart?.Invoke();
+        }
+    }
 
-    private void NotifyGameOver() => onGameOver?.Invoke();
     private event Action onGameOver;
     public event Action OnGameOver {
         add    { lock(this) { onGameOver += value; } }
         remove { lock(this) { onGameOver -= value; } }
     }
+    private void NotifyGameOver(){ 
+        if (!ApplicationIsQuitting) {
+            onGameOver?.Invoke();
+        }
+    }
 
-    private void NotifyScoreChanged() => onScoreChanged?.Invoke();
     private event Action onScoreChanged;
     public event Action OnScoreChanged {
         add    { lock(this) { onScoreChanged += value; } }
         remove { lock(this) { onScoreChanged -= value; } }
+    }
+    private void NotifyScoreChanged() { 
+        if (!ApplicationIsQuitting) {
+            onScoreChanged?.Invoke();
+        }
     }
 
     // ===================== Outside Facing API ======================

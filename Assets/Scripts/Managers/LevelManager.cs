@@ -30,7 +30,11 @@ public class LevelManager : MonoBehaviour {
     }
 
     // ===================== Custom Events Code ======================
-    private void NotifyChunkSpawned(WorldChunk newChunk) => onChunkSpawned?.Invoke(newChunk);
+    private void NotifyChunkSpawned(WorldChunk newChunk) {
+        if (!GameManager.ApplicationIsQuitting) {
+            onChunkSpawned?.Invoke(newChunk);
+        }
+    }
     private event Action<WorldChunk> onChunkSpawned;
     public event Action<WorldChunk> OnChunkSpawned {
         add    { lock(this) { onChunkSpawned += value; } }
@@ -45,18 +49,27 @@ public class LevelManager : MonoBehaviour {
     }
 
     // ===================== Outside Facing API ======================
-    public static void RequestNextChunk() => Instance?.SpawnNextChunk();
-    public static void ChunkSpawned(WorldChunk newChunk) {
-        // Cache first chunk spawned
-        if (Instance && newChunk.IsStartChunk) { 
-            Instance.spawnPoint = newChunk?.NextSpawnPoint ?? Instance.spawnPoint;
-        }
-        Instance?.NotifyChunkSpawned(newChunk);
-    }
-    public static void ChunkDestroyed() {
-        if (GameManager.GetState() == GameManager.GameState.InGame) {
+    public static void RequestNextChunk() {
+        if (!GameManager.ApplicationIsQuitting) {
             Instance?.SpawnNextChunk();
         }
-        Instance?.NotifyChunkDestroyed();
+    }
+        
+    public static void ChunkSpawned(WorldChunk newChunk) {
+        if (!GameManager.ApplicationIsQuitting) { 
+            // Cache first chunk spawned
+            if (Instance && newChunk.IsStartChunk) { 
+                Instance.spawnPoint = newChunk?.NextSpawnPoint ?? Instance.spawnPoint;
+            }
+            Instance?.NotifyChunkSpawned(newChunk);
+        }
+    }
+    public static void ChunkDestroyed() {
+        if (!GameManager.ApplicationIsQuitting) {
+            if (GameManager.GetState() == GameManager.GameState.InGame) {
+                Instance?.SpawnNextChunk();
+            }
+            Instance?.NotifyChunkDestroyed();
+        }
     }
 }

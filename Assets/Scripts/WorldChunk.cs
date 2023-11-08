@@ -27,12 +27,11 @@ public class WorldChunk : MonoBehaviour {
         if (isStartChunk) GameManager.DelayMethod(() => { 
             LevelManager.RequestNextChunk();
             LevelManager.RequestNextChunk();
+            LevelManager.RequestNextChunk();
         });
     }
 
     void OnDestroy() {
-        if (GameManager.GetState() == GameManager.GameState.InGame) { 
-            LevelManager.ChunkDestroyed();
-        }
+        LevelManager.ChunkDestroyed();
     }
 }

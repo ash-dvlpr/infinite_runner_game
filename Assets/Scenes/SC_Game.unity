@@ -1104,7 +1104,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 15}
+  m_Size: {x: 1, y: 30}
   m_EdgeRadius: 0
 --- !u!4 &948958341
 Transform:
@@ -1601,6 +1601,7 @@ MonoBehaviour:
   chunkPrefabs:
   - {fileID: 3588443042351948858, guid: c4e387bdd0b9fed40b7213c0151754a7, type: 3}
   - {fileID: 3461535354578378756, guid: 2b255707d0afc334e994fd07f363d979, type: 3}
+  - {fileID: 7397107227375269154, guid: 4b35ef2d9520a364aa5ea9b69a47edf9, type: 3}
 --- !u!1 &1581187260
 GameObject:
   m_ObjectHideFlags: 0
