@@ -9,7 +9,7 @@ public class Collectable : MonoBehaviour {
     [SerializeField] SO_CollectibleItem itemDefinition;
     public SO_CollectibleItem ItemDefinition { get => itemDefinition; }
 
-    //? References
+    //? References & Components
     Collider2D _collider;
 
     // ========================= Unity Code =========================

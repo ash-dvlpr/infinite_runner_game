@@ -7,7 +7,7 @@ using UnityEngine.Analytics;
 public class PlayerUI : MonoBehaviour {
     private static string SCORE = "SCORE", HIGHSCORE = "RECORD";
     //! ========================= Variables ==========================
-    //? References
+    //? References & Components
     [Header("General Configuration")]
     [SerializeField] bool isGameOverScreen;
     [SerializeField] GameObject uiRoot;

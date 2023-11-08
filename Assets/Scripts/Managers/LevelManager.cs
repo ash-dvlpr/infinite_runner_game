@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour {
     public static LevelManager Instance { get; private set; }
 
     // ========================= Variables ==========================
-    //? References
+    //? References & Components
     [SerializeField] List<GameObject> chunkPrefabs;
     GameObject spawnPoint;
 
