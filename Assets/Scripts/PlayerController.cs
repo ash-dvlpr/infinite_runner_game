@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
     private float distanceTraveled;
     private int _health;
     public int Health {
-        get => _health; 
+        get => _health;
         set { _health = Mathf.Clamp(value, 0, GameManager.GetDifficultySettings.PlayerMaxHealth); }
     }
 
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate() {
         isTouchingGround = Physics2D.Raycast(transform.position, Vector2.down, groundDetectionRange, _groundLayer);
-        if(GameManager.GetState() == GameManager.GameState.InGame) {
+        if (GameManager.GetState() == GameManager.GameState.InGame) {
             HandleMovement();
             distanceTraveled = transform.position.x - startPosition.x;
             GameManager.UpdateDistanceTraveled(distanceTraveled);
@@ -106,17 +106,24 @@ public class PlayerController : MonoBehaviour {
     }
 
     IEnumerator DrainHealth() {
-        while(true) {
+        while (true) {
             yield return new WaitForSeconds(GameManager.GetDifficultySettings.PlayerHealthDrainRate);
             Health--;
         }
     }
 
     void UpdateInputs() {
-        // TODO: PC specific code
+#if UNITY_STANDALONE || UNITY_EDITOR
+        // PC specific code
         iJumpPressed = Input.GetKey(KeyCode.Space);
+#elif UNITY_ANDROID    
+        // Android specific code
+        if (Input.touchCount > 0) {
+            var touch = Input.GetTouch(0).phase;
+            iJumpPressed = touch == TouchPhase.Began || touch == TouchPhase.Moved || touch == TouchPhase.Stationary;
+        }
 
-        // TODO: Android specific code
+#endif
         // TODO: XBOX specific code
     }
     void PreHandleMovement() {
@@ -152,8 +159,8 @@ public class PlayerController : MonoBehaviour {
     }
     void UpdateAnimationState() {
         _animator.SetBool(ANIM_ID_PARAM_GROUNDED, isTouchingGround);
-        _animator.SetBool(ANIM_ID_PARAM_RUNNING,  isRunning);
-        _animator.SetBool(ANIM_ID_PARAM_DEAD,     isDead);
+        _animator.SetBool(ANIM_ID_PARAM_RUNNING, isRunning);
+        _animator.SetBool(ANIM_ID_PARAM_DEAD, isDead);
     }
 
     // ===================== Outside Facing API ======================
