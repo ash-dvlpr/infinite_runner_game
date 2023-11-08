@@ -15,15 +15,15 @@ MonoBehaviour:
   clipConfigs:
   - type: 0
     clip: {fileID: 8300000, guid: c8cd353cac1a0b745906d70e47ab7b41, type: 3}
-    volume: 1
+    volume: 0.3
     loop: 1
   - type: 0
     clip: {fileID: 8300000, guid: 54b125f0e35695c43a94f7749369f4c9, type: 3}
-    volume: 1
+    volume: 0.2
     loop: 1
   - type: 0
     clip: {fileID: 8300000, guid: f6bae52b346f1cf43a02fe7f0d14d08b, type: 3}
-    volume: 1
+    volume: 0.2
     loop: 0
   - type: 1
     clip: {fileID: 8300000, guid: b91230dcb2540ee4abc4a90bdaf1f16e, type: 3}
@@ -35,5 +35,5 @@ MonoBehaviour:
     loop: 0
   - type: 1
     clip: {fileID: 8300000, guid: 878adcbb2500b5c4e9a1051300931568, type: 3}
-    volume: 1
+    volume: 0.6
     loop: 0

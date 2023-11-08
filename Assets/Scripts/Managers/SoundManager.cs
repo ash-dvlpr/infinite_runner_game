@@ -63,7 +63,7 @@ public class SoundManager : MonoBehaviour {
     public static SO_AudioSettings GetAudioSettings => Instance?.audioSettings;
 
     public static void PlayClip(AudioClip clip) {
-        if (Instance) {
+        if (Instance && clip) {
             var config = Instance.audioSettings.FindClipConfig(clip);
             if (null != config) { 
                 switch (config.Type) {

@@ -33,9 +33,7 @@ public class SO_CollectibleItem : ScriptableObject {
         }
 
         player.AddScore(GrantedScore);
-        if (InteractionSound) {
-            // TODO: Play audio clip
-        }
+        SoundManager.PlayClip(InteractionSound);
     }
 
 }

@@ -183,9 +183,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c4278a56a9d83498ed851f7ebc78a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 6
   groundDetectionRange: 1.1
   jumpForce: 11
   jumpGravity: 1
   fallGravity: 3
   jumpMaxTime: 0.2
+  jumpSound: {fileID: 8300000, guid: b91230dcb2540ee4abc4a90bdaf1f16e, type: 3}
+  deathSound: {fileID: 8300000, guid: 5bd1b87af44a199479ff39980ba2497a, type: 3}

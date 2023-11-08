@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float fallGravity          =  3.0f;
     [SerializeField] private float jumpMaxTime          =  0.2f;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip deathSound;
 
     //? Internal
     private float distanceTraveled;
@@ -90,6 +93,7 @@ public class PlayerController : MonoBehaviour {
         _rb.simulated = true;
     }
     void OnGameOver() {
+        SoundManager.PlayClip(deathSound);
         isDead = true;
         isRunning = false;
         _rb.simulated = false;
@@ -107,6 +111,7 @@ public class PlayerController : MonoBehaviour {
         if (iJumpPressed) {
             // Start jumping 
             if (isTouchingGround) {
+                if (!isJumping) SoundManager.PlayClip(jumpSound);
                 _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
                 jumpTimeCounter = jumpMaxTime;
                 isJumping = true;

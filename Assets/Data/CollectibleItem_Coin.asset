@@ -15,4 +15,4 @@ MonoBehaviour:
   resource: 1
   resourceAmount: 1
   grantedScore: 10
-  interactionSound: {fileID: 0}
+  interactionSound: {fileID: 8300000, guid: 878adcbb2500b5c4e9a1051300931568, type: 3}
